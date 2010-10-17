@@ -8,12 +8,14 @@
     </ul>
     {% endifequal %}
     <form name="public" method="post">
+        {% csrf_token %}
         {{ public_form.as_ul }}
         <input type="submit" name="public_form" value="Uložit" />
     </form>
 
     {% if users_form and users_form.forms %}
     <form name="users" method="post">
+          {% csrf_token %}
         {{ users_form.management_form }}
         <table>
         {% for form in users_form.forms %}
@@ -27,6 +29,7 @@
     {% endif %}
 
     <form name="new_user" method="post">
+        {% csrf_token %}
         {{ new_user_form.as_ul }}
         <input type="submit" name="new_user_form" value="Pridat" />
     </form>
