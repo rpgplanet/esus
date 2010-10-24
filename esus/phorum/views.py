@@ -27,7 +27,7 @@ def root(request):
 
 @login_required
 def categories(request):
-    categories = Category.objects.all().order_by('name')
+    categories = Category.objects.all().order_by('title')
 
     return direct_to_template(request, "esus/categories.html", {
         'categories' : categories,
@@ -36,7 +36,7 @@ def categories(request):
 @login_required
 def category(request, category):
     category = get_object_or_404(Category, slug=category)
-    tables = category.table_set.order_by('-name')
+    tables = category.table_set.order_by('-title')
 
     return direct_to_template(request, "esus/category.html", {
         "category" : category,
@@ -49,10 +49,11 @@ def table_create(request, category):
     if request.method == "POST":
         form = TableCreationForm(request.POST)
         if form.is_valid():
-            table = category.add_table(
+            table = Table.objects.create(
                 owner = request.user,
-                name = form.cleaned_data['name'],
-                slug = slugify(form.cleaned_data['name']),
+                category = category,
+                title = form.cleaned_data['title'],
+                slug = slugify(form.cleaned_data['title']),
                 description = form.cleaned_data['description'],
             )
             return HttpResponseRedirect(reverse("esus-phorum-table", kwargs={

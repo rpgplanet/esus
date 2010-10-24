@@ -44,8 +44,10 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.admin',
 
-    'south',
+#    'south',
     'djangomarkup',
+
+    'ella.core',
     
     'esus.phorum',
 )

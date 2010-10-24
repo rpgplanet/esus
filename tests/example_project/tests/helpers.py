@@ -37,11 +37,11 @@ class EsusTestCase(SeleniumTestCase):
                     'username' : "//h1",
                 },
                 'table' : {
-                    'name' : "//h1[@name='table-name']",
+                    'title' : "//h1[@name='table-title']",
                     'access' : "//ul[@id='table-navigation']//a[@name='access']",
                 },
                 'table_access' : {
-                    'name' : "//h1[@name='table-name']",
+                    'title' : "//h1[@name='table-title']",
                     'submit_new_user' : "//input[@name='new_user_form']",
                     'users_list' : {
                         'access_read' : 'id_form-%(position)s-can_read',

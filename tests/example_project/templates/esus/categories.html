@@ -4,7 +4,7 @@
 	<div id="categories">
         <ul>
         {% for category in categories %}
-            <li><a href="{% url esus-phorum-category category=category.slug %}">{{ category.name }}</a></li>
+            <li><a href="{% url esus-phorum-category category=category.slug %}">{{ category.title }}</a></li>
         {% endfor %}
         </ul>
 	</div>

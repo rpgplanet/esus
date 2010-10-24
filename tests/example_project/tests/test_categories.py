@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from example_project.tests.helpers import EsusTestCase
-from example_project.tests.fixtures import create_zena_categories, create_tables
+from example_project.tests.fixtures import create_international_categories, create_tables
 
 from esus.phorum.models import Category
 
 class TestCategories(EsusTestCase):
 
     def setUp(self):
-        create_zena_categories(self)
+        create_international_categories(self)
         create_tables(self)
         
         super(TestCategories, self).setUp()
@@ -21,7 +21,7 @@ class TestCategories(EsusTestCase):
             page_categories.append(s.get_text(self.elements['pages']['category']['categories_list']+"[%d]" % (i+1)))
         # check all categories are in place
         for category in categories:
-            self.assert_equals(True, category.name in page_categories)
+            self.assert_equals(True, category.title in page_categories)
 
 
     def test_tables_in_category_shown(self):

@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 
-from esus.phorum.models import Category, Table
+from ella.core.models import Category
+from esus.phorum.models import Table
 
 __all__ = ("user_super", "users_usual", "table_simple")
 
@@ -42,16 +44,33 @@ def users_usual(case):
         is_superuser = False,
     )
 
+def get_default_site():
+    return Site.objects.get_or_create(
+        name = 'localhost',
+        domain = 'localhost.local'
+    )[0]
 
 def table_simple(case, table_owner=None):
     case.category = Category.objects.create(
-        name = u"Category",
+        title = u"Category",
         slug = u"category",
+        site = get_default_site(),
+        tree_path = '',
+        tree_parent = None
     )
 
-    case.table = case.category.add_table(
-        name = u"Table",
+    case.subcategory = Category.objects.create(
+        title = u"Subcategory",
+        slug = u"subcategory",
+        site = get_default_site(),
+        tree_path = 'subcategory',
+        tree_parent = case.category
+    )
+
+    case.table = Table.objects.create(
+        title = u"Table",
         owner = table_owner or case.user_tester,
+        category = case.category
     )
 
 def comment_simple(case, table=None, author=None):

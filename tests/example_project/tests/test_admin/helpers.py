@@ -27,8 +27,8 @@ class AdminTestCase(SeleniumTestCase):
                     'submit' : "//input[@type='submit']"
                 },
                 'welcome' : {
-                    'category_add' : '//a[@href="phorum/category/add/"]',
-                    'category_list' : '//a[@href="phorum/category/"]',
+                    'category_add' : '//a[@href="core/category/add/"]',
+                    'category_list' : '//a[@href="core/category/"]',
                 },
                 'hall' : {
 

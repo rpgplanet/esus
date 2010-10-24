@@ -1,7 +1,7 @@
 {% extends "main.html" %}
 
 {% block primary_col %}
-    <h1>{{ table.name }} - Nastavení práv</h1>
+    <h1>{{ table.title }} - Nastavení práv</h1>
     {% ifequal table.owner user %}
     <ul id="table-navigation">
         <li><a href="{% url esus-phorum-table table=table.slug category=category.slug %}">Zpět ke stolu</a></li>
@@ -31,6 +31,6 @@
     <form name="new_user" method="post">
         {% csrf_token %}
         {{ new_user_form.as_ul }}
-        <input type="submit" name="new_user_form" value="Pridat" />
+        <input type="submit" name="new_user_form" value="Přidat" />
     </form>
 {% endblock %}

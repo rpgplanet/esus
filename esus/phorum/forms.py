@@ -22,7 +22,7 @@ class UserField(forms.CharField):
         return value
 
 class TableCreationForm(forms.Form):
-    name = forms.CharField(max_length=50)
+    title = forms.CharField(max_length=50)
     description = forms.CharField(widget=forms.Textarea())
 
 class CommentCreationForm(forms.Form):

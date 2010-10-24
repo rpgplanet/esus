@@ -2,12 +2,12 @@
 #from django.utils.translation import ugettext_lazy as _
 
 from example_project.tests.helpers import EsusTestCase
-from example_project.tests.fixtures import create_zena_categories, create_tables
+from example_project.tests.fixtures import create_international_categories, create_tables
 
 class TestTables(EsusTestCase):
 
     def setUp(self):
-        create_zena_categories(self)
+        create_international_categories(self)
         create_tables(self)
 
         super(TestTables, self).setUp()
@@ -22,13 +22,13 @@ class TestTables(EsusTestCase):
         # go for "Create table link
         s.click(self.elements['pages']['category']['table_add'])
 
-        s.type(u"id_name", u"论语: Lún Yǔ")
+        s.type(u"id_title", u"论语: Lún Yǔ")
         s.type(u"id_description", u"Peacful discussion about those works of Kǒng Fūzǐ")
 
         s.click(self.elements['navigation']['submit_form'])
         s.wait_for_page_to_load(30000)
 
-        self.assert_equals(u"论语: Lún Yǔ", s.get_text(self.elements['pages']['table']['name']))
+        self.assert_equals(u"论语: Lún Yǔ", s.get_text(self.elements['pages']['table']['title']))
 
     def test_article_adding(self):
         s = self.selenium
@@ -86,7 +86,7 @@ This is ""Czechtile"" text.
 
 class TestTableAccess(EsusTestCase):
     def setUp(self):
-        create_zena_categories(self)
+        create_international_categories(self)
         create_tables(self)
 
         super(TestTableAccess, self).setUp()

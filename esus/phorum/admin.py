@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from esus.phorum.models import Category
+from esus.phorum.models import Table
 
-admin.site.register(Category)
+admin.site.register(Table)

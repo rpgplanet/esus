@@ -11,9 +11,10 @@ class TestHallAdministration(AdminTestCase):
 
         s.click(self.elements['pages']['welcome']['category_add'])
 
-        s.type('id_name', u"Example category")
+        s.type('id_title', u"Example category")
         s.type('id_slug', u"example-category")
 #        s.type('id_description', u"Description")
+        s.select('id_site', u"index=1")
 
         s.click(self.elements['listing']['save'])
 
@@ -23,16 +24,17 @@ class TestHallAdministration(AdminTestCase):
         s = self.selenium
 
         s.click(self.elements['pages']['welcome']['category_add'])
-        s.type('id_name', u"Example category")
+        s.type('id_title', u"Example category")
         s.type('id_slug', u"example-category")
 
         s.click(self.elements['listing']['save'])
         s.click(self.elements['navigation']['home'])
         s.click(self.elements['pages']['welcome']['category_add'])
 
-        s.type('id_name', u"AAA Example nested category")
+        s.type('id_title', u"AAA Example nested category")
         s.type('id_slug', u"aaa-example-nested-category")
-        s.select('id_parent', u"index=0")
+        s.select('id_tree_parent', u"index=0")
+        s.select('id_site', u"index=1")
 
         s.click(self.elements['listing']['save'])
         self.assert_equals(u"AAA Example nested category", s.get_text(self.elements['listing']['list_first']))

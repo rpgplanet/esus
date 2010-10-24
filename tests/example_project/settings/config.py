@@ -60,4 +60,5 @@ MEDIA_ROOT = join(dirname(example_project.__file__), 'media')
 MEDIA_URL = '/media/'
 
 ADMIN_MEDIA_PREFIX = '/static/admin_media/'
+NEWMAN_MEDIA_PREFIX = '/static/newman_media/'
 
