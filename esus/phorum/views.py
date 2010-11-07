@@ -1,3 +1,5 @@
+from anyjson import serialize
+
 from django.template import loader, RequestContext
 from django.http import HttpResponseForbidden
 from django.contrib.auth.models import User
@@ -150,6 +152,14 @@ def table(request, category, table, from_pk=None, page_number=None):
         comments = comments[:-1]
     else:
         next_page_pk = None
+
+    if request.is_ajax():
+        return serialize({
+            "comments" : comments,
+            "page_number" : str(page_number),
+            "next_page_pk" : next_page_pk
+        })
+
 
     if not comment_forms:
         comment_forms = formset_factory(CommentControlForm, can_delete=True)(
