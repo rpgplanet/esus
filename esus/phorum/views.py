@@ -3,6 +3,7 @@ from django.http import HttpResponseForbidden
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.template.defaultfilters import slugify
@@ -68,9 +69,13 @@ def table_create(request, category):
     })
 
 @login_required
-def table(request, category, table):
+def table(request, category, table, from_pk=None, page_number=None):
     category = get_object_or_404(Category, slug=category)
     table = get_object_or_404(Table, slug=table)
+    try:
+        page_number = int(page_number)
+    except TypeError:
+        page_number = 1
 
     access_manager = AccessManager(context={
         "user" : request.user,
@@ -122,7 +127,29 @@ def table(request, category, table):
                         pass
             comment_forms = None
 
-    comments = Comment.objects.filter(table=table).order_by('-date')
+    # skip is costly, so pagination is done via range query trick
+    # we could either depend on timestap not containing duplicities or on the
+    # fact that ID is always-increasing positive integer.
+    # because so many things in Django rely on PositiveIntegerField, I'd go for it;
+    # when we switch to non-RDBMS backend, those strategies shall be reversed.
+
+    # To be stateless, URI must also contain of the next_page as well as "page number"
+    # parameter
+
+    on_page = getattr(settings, "ESUS_DEFAULT_COMMENTS_ON_PAGE", 10)
+
+    # list() querysets directly to support negative indexing fun, and we're
+    # zipping it later in memory anyway
+    if not from_pk:
+        comments = list(Comment.objects.filter(table=table).order_by('-date')[:on_page+1])
+    else:
+        comments = list(Comment.objects.filter(table=table, id__lte=from_pk).order_by('-date')[:on_page+1])
+
+    if len(comments) > on_page:
+        next_page_pk = comments[-1:][0].pk
+        comments = comments[:-1]
+    else:
+        next_page_pk = None
 
     if not comment_forms:
         comment_forms = formset_factory(CommentControlForm, can_delete=True)(
@@ -140,6 +167,9 @@ def table(request, category, table):
         "formset" : comment_forms,
         "comments" : zip(comments, comment_forms.forms),
         'access' : access_manager,
+        "next_page_pk" : next_page_pk,
+        "page_number" : page_number,
+        "next_page_number" : page_number+1,
     })
 
 @login_required
