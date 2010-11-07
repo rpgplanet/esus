@@ -93,7 +93,7 @@ def table(request, category, table):
     if request.method == "POST":
         # TODO: Abstract this logic into something more sensible, some kind of
         # action dispatcher would be nice
-        if request.POST.has_key(u"Odeslat"):
+        if request.POST.has_key(u"odeslat"):
             
             form = CommentCreationForm(request.POST)
             if form.is_valid():
@@ -104,7 +104,10 @@ def table(request, category, table):
                     text = form.cleaned_data['text'],
                     author = request.user,
                 )
-                #TODO: Redirect to self avoid multiple posts
+                return HttpResponseRedirect(reverse("esus-phorum-table", kwargs={
+                    "category" : category.slug,
+                    "table" : table.slug,
+                }))
                 form = CommentCreationForm()
         elif request.POST.has_key(u'control-action') \
             and request.POST[u'control-action']:
